@@ -16,6 +16,74 @@ metadata:
 
 ---
 
+## 交互协议（AskUserQuestion-first）
+
+- 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
+- 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
+- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 在生成长文本（大段论文内容、rebuttal 成稿）前，先用结构化提问确认写作状态、目标风格与本次优先输出。
+- 在调用子 agent（如 `paper-miner`、`rebuttal-writer`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
+
+## 入口问诊（先问再写）
+
+按顺序询问（可一次问 1-3 题，回答后再进入下一步）：
+
+### paper_state（当前状态）
+- 从零起草（推荐）：基于实验报告搭论文骨架并逐段起草
+- 已有草稿需改写：以现有稿为主，做结构/逻辑/表达重写
+- 准备 rebuttal：针对审稿意见逐条回应并总结主要修改
+
+### paper_style（目标风格）
+- 顶会风格（推荐）：NeurIPS/ICML/ICLR 的叙事与结构
+- 期刊风格：更完整相关工作与更充分讨论
+- 通用版本：先写可迁移的通用草稿
+
+### paper_focus（本次优先输出）
+- 大纲 + Abstract（推荐）
+- 主体（Method + Experiments）
+- Rebuttal：结构化回复与修改清单
+
+## 分岔追问模板（按需，多轮）
+
+仅在相关分支触发下面的追问；每轮保持 2-3 选项。
+
+### 起草分支（paper_state=从零起草）
+
+#### paper_input_ready（输入材料完整度）
+- 有 `research/experiment-report.md`（推荐）
+- 只有零散结果与笔记
+- 结果还不稳定（先回 experiment 补实验）
+
+#### paper_contrib_count（贡献条目数量）
+- 2 条（推荐）
+- 3 条
+- 不确定（先从 2 条起草，后续再调）
+
+### 改写分支（paper_state=已有草稿需改写）
+
+#### rewrite_scope（改写范围）
+- 结构 + 逻辑优先（推荐）
+- 语言润色优先
+- 两者都要（先结构后润色）
+
+### Rebuttal 分支（paper_state=准备 rebuttal）
+
+#### rebuttal_new_exp（是否能补实验）
+- 可以补实验（推荐）
+- 不能补实验（只能解释与澄清）
+- 不确定（先列一个最小补实验清单）
+
+#### rebuttal_tone（回复策略）
+- 正面承认 + 具体修改（推荐）
+- 强调现有结果已足够
+- 先澄清误解再回应细节
+
+## 输出策略（强制）
+
+- `paper_state=从零起草` 或 `已有草稿需改写`：优先使用 `templates/manuscript.md` 作为骨架生成/重写 `research/manuscript.md`。
+- `paper_state=准备 rebuttal`：优先使用 `templates/rebuttal.md` 作为骨架生成 rebuttal 草稿，并附“主要修改/新增实验”清单。
+- 在写 “Method/Experiments” 等长段落前，先把本次 `paper_focus` 对应的产出范围确认清楚，再进入长文本生成。
+
 ## 核心活动
 
 根据论文状态，可能会进行以下活动：

@@ -7,6 +7,32 @@ tags: [experiment, coding, analysis]
 
 进入实验验证模式。这是研究的第二阶段：实验与验证。
 
+## 交互协议（AskUserQuestion-first）
+
+- 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
+- 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
+- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 在调用子 agent（如 `architect`、`data-analyst`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
+
+## 入口问诊（先问再做）
+
+按顺序询问（可一次问 1-3 题，回答后再进入下一步）：
+
+### exp_input（输入材料）
+- 有 `research/idea-proposal.md`（推荐）
+- 只有口头描述
+- 想先回 discover
+
+### exp_focus（本次重点）
+- 实验设计（推荐）
+- 代码实现与可复现
+- 分析已有结果
+
+### exp_rigor（可复现要求）
+- 标准可复现（推荐）
+- 快速跑通优先
+- 严格记录
+
 ## 核心活动
 
 根据实验需求，进行以下活动：

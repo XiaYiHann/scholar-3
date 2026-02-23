@@ -7,6 +7,32 @@ tags: [writing, paper, rebuttal]
 
 进入论文撰写模式。这是研究的第三阶段：写作与发表。
 
+## 交互协议（AskUserQuestion-first）
+
+- 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
+- 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
+- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 在生成长文本（大段论文内容、rebuttal 成稿）前，先用结构化提问确认写作状态、目标风格与本次优先输出。
+
+## 入口问诊（先问再写）
+
+按顺序询问（可一次问 1-3 题，回答后再进入下一步）：
+
+### paper_state（当前状态）
+- 从零起草（推荐）
+- 已有草稿需改写
+- 准备 rebuttal
+
+### paper_style（目标风格）
+- 顶会风格（推荐）
+- 期刊风格
+- 通用版本
+
+### paper_focus（本次优先输出）
+- 大纲 + Abstract（推荐）
+- 主体（Method + Experiments）
+- Rebuttal：结构化回复与修改清单
+
 ## 核心活动
 
 根据论文状态，进行以下活动：

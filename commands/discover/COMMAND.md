@@ -7,6 +7,32 @@ tags: [ideation, literature, discovery]
 
 进入 Idea 探索模式。这是研究的第一阶段：发现与探索。
 
+## 交互协议（AskUserQuestion-first）
+
+- 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
+- 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
+- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 在调用子 agent（如 `literature-reviewer`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
+
+## 入口问诊（先问再做）
+
+按顺序询问（可一次问 1-3 题，回答后再进入下一步）：
+
+### discover_start（起点）
+- 模糊想法（推荐）
+- 具体问题或假设
+- 已有 proposal 想改
+
+### discover_goal（本次目标）
+- 清晰问题 + 假设（推荐）
+- 文献地图 + Gap
+- 验证计划（含小实验）
+
+### discover_output_now（本次是否生成 proposal）
+- 生成 `research/idea-proposal.md`（推荐）
+- 先不生成
+- 不确定
+
 ## 核心活动
 
 根据用户的探索内容，进行以下活动：
