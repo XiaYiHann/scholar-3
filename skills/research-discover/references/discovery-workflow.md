@@ -135,20 +135,32 @@
 
 ### 提案内容
 1. Problem Statement
-2. Literature Review
-3. Mathematical Foundation
-4. Validation Plan
-5. Next Steps
+2. Problem Normal Form（task/dataset/metric/baseline/证伪条件）
+3. Literature Review
+4. Mathematical Foundation
+5. Validation Plan
+6. Next Steps
 
 ### 输出位置
 `research/idea-proposal.md`
 
 ## 向下一阶段过渡
 
-当满足以下条件时，可以进入实验阶段：
-- [ ] 研究问题清晰
-- [ ] 文献调研完整
-- [ ] 理论基础扎实
-- [ ] 验证计划明确
+### 证据账本（Evidence Ledger）
+
+在进入实验阶段前，创建/初始化 `research/evidence-ledger.md`（使用 `templates/evidence-ledger.md`）：
+- 把可能写进论文的 Claim 列出来
+- 为每条 Claim 指定“需要什么证据”（表/图/日志/定理）
+- 标注当前状态：`planned/partial/verified/falsified`
+
+### Exit Criteria（Discover → Experiment，顶会偏严默认）
+
+当满足以下条件时，才可以进入实验阶段：
+- [ ] 1 个主假设 + 1 个明确证伪条件（出现什么现象就判定假设失败）
+- [ ] 明确 task/dataset/metric（或理论命题的定义域/结论形式）
+- [ ] ≥6 篇核心文献（其中 ≥2 篇强 baseline），每篇包含：
+  - 标题、作者、年份、venue/arXiv号、可核验链接
+  - 1-2 句关键结论与“为什么相关”
+- [ ] 最小验证方案：输入、输出、对照组、预期现象、失败解释路径
 
 使用 `/experiment` 命令进入实验验证模式。

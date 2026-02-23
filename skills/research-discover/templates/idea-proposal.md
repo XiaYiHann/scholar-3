@@ -20,12 +20,41 @@
 
 ---
 
+## Problem Normal Form（强制）
+
+> 目的：把“模糊想法”压缩成可证伪、可评估、可复现的最小问题形式。
+
+### 任务定义（Task / Dataset / Metric）
+- Task: [分类/生成/检索/预测/控制/理论命题...]
+- Dataset / Setting: [数据集名称或理论设定]
+- Primary Metric: [唯一主指标，写死]
+
+### 输入/输出（Input / Output）
+- Input: [输入是什么？形状/类型/范围]
+- Output: [输出是什么？形状/类型/范围]
+
+### Baselines（至少 2 个强 baseline）
+- Baseline A: [可核验引用 + 为什么是强 baseline]
+- Baseline B: [可核验引用 + 为什么是强 baseline]
+
+### Hypothesis（主假设）
+- H1: [一句话写清楚]
+
+### Falsification（证伪条件，至少 1 条）
+- 如果出现以下现象，则判定 H1 不成立并停止/回退：
+  - [具体阈值/现象/对照结果]
+
+---
+
 ## Literature Review
 
 ### 核心论文 (X 篇)
-1. **Author et al., Year** - 主要贡献摘要
-2. **Author et al., Year** - 主要贡献摘要
-3. **Author et al., Year** - 主要贡献摘要
+> 每条文献必须可核验：标题、作者、年份、venue/arXiv号、可点击链接 + 1-2 句总结 + 与本工作关系。
+
+1. **Title** (Author, Year, Venue/arXiv)  
+   Link: [URL]  
+   Key takeaway: ...  
+   Why relevant (baseline/gap/technique): ...
 
 ### Gap 分析
 | 现有方法 | 局限性 | 我们的改进 |
@@ -73,6 +102,11 @@
 ### 验证方法
 - 如何衡量成功
 - 统计检验方法
+
+### Kill Criteria（停止条件，强制）
+- 如果出现以下情况，则停止该方向或回到 `/discover` 重构假设：
+  - [现象/阈值 1]
+  - [现象/阈值 2]
 
 ---
 

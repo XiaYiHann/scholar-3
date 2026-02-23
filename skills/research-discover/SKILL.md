@@ -6,6 +6,7 @@ metadata:
   phase: discovery
   outputs:
     - research/idea-proposal.md
+    - research/evidence-ledger.md
 ---
 
 进入 Idea 探索模式。深入思考。自由想象。与研究想法进行苏格拉底式对话。
@@ -18,9 +19,31 @@ metadata:
 
 - 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
 - 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 每题必须有自由文本兜底：
+  - 若运行环境自带 `Other`/自由输入，则直接使用；
+  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
 - 在调用子 agent（如 `literature-reviewer`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
 - 用户每次选择后，先复述“你选择了 X，所以接下来我会做 Y”，再开始长输出或检索。
+
+## Truthfulness & Verification Contract（不可协商）
+
+- **不编造文献**：论文标题/作者/年份/venue/arXiv/DOI/链接只能来自检索结果或用户材料；否则必须标注为“未验证候选”，并继续检索/追问核验信息。
+- **不编造结果**：Discovery 阶段只能写“假设/计划/预期/证伪条件”，不能写“提升了 X%”等实验结论。
+- **关键主张必须可被证伪**：每个主假设都要给出至少 1 条明确的证伪条件（falsification）。
+- **信息不足就停**：先用结构化提问补齐，再继续推进；禁止用“合理猜测”冒充事实。
+
+## 证据账本（Evidence Ledger）
+
+- 在本阶段创建/初始化 `research/evidence-ledger.md`（使用 `templates/evidence-ledger.md` 作为骨架）。
+- 目标：把未来论文里可能出现的 Claim 先写下来，并标注它们目前是 `planned` 还是已有初步证据。
+
+## 子 agent 可用性与降级策略
+
+- 若 `literature-reviewer` 可用：先用结构化提问收集关键词/时间窗/检索深度，再调用该 agent。
+- 若 `literature-reviewer` 不可用：
+  - 输出一个“检索计划”（关键词扩展、数据库清单、筛选规则）。
+  - 要求用户提供可核验链接（arXiv/DOI/官方页面）；在用户提供前，不要编造引用。
+  - 以固定格式记录每条文献：标题、作者、年份、venue/arXiv号、链接、1-2 句总结、与本工作的关系（baseline/gap/technique）。
 
 ## 入口问诊（先问再做）
 
@@ -78,6 +101,16 @@ metadata:
 
 - 若选择 “已有 proposal 想改”：先读取 `research/idea-proposal.md`，再决定改写范围与补充项。
 - 若 `discover_output_now=生成`：使用 `templates/idea-proposal.md` 的结构生成 `research/idea-proposal.md`，并在文末附上下一步建议与进入 `/experiment` 的准入条件。
+- 同步更新 `research/evidence-ledger.md`：为每条贡献/主张写上最小证据需求（例如需要哪些表/图/日志）。
+- 生成 proposal 时强制包含：Problem Normal Form（task/dataset/metric/baseline/证伪条件）与 Kill Criteria（停止条件）。
+
+## Exit Criteria（Discover → Experiment，顶会偏严默认）
+
+只有满足以下条件，才允许进入 `/experiment`：
+- [ ] 1 个主假设 + 1 个明确证伪条件（出现什么现象就判定假设失败）
+- [ ] 明确 task/dataset/metric（或理论命题的定义域/结论形式）
+- [ ] ≥6 篇核心文献（其中 ≥2 篇强 baseline），每篇含可核验指针（链接/arXiv号等）与 1-2 句“为什么相关”
+- [ ] 最小验证方案：输入、输出、对照组、预期现象、失败解释路径（失败时下一步怎么查）
 
 ## 核心活动
 

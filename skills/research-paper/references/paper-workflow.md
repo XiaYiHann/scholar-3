@@ -66,6 +66,19 @@
 3. **逻辑连贯** - 故事线清晰
 4. **图表精美** - 一图胜千言
 
+### Claim → Evidence Map（强制）
+
+在写 Abstract/Contributions/主结果之前，必须先完成一张映射表：
+
+| Claim（论文要说的话） | Evidence（表/图/定理/消融/统计） | Pointer（Table/Fig/路径） | Status |
+|---|---|---|---|
+| ... | ... | ... | verified/partial |
+
+规则：
+- 没有证据指针（Pointer）的 Claim 不允许写进 Abstract/Contributions
+- 没有日志/表格/运行输出时，只能写计划/预期，不能写确定性数字结论
+- 写作前读取并更新 `research/evidence-ledger.md`（证据账本）
+
 ### 章节写作技巧
 
 **Abstract**
@@ -108,7 +121,9 @@
 - [ ] 标题简洁有力
 - [ ] 摘要覆盖所有要点
 - [ ] 贡献明确且可验证
+- [ ] Claim → Evidence Map 完整，且每条贡献都有可核验 Pointer
 - [ ] 相关工作全面
+- [ ] 引用可核验（标题/年份/链接/arXiv/DOI 等），不包含“未验证候选”
 - [ ] 方法描述清晰可复现
 - [ ] 实验设计合理
 - [ ] 结果分析充分
@@ -163,10 +178,10 @@
    - 解释不采纳原因
 
 2. **单条回复**
-   - 感谢意见
-   - 阐述理解
-   - 说明修改
-   - 指出位置
+   - Acknowledge：我理解你担心什么
+   - Action：我做了什么修改/新增了什么实验
+   - Evidence：结果是什么（必须给 Table/Fig/路径/位置）
+   - Residual limitation：仍然不能解决的部分（诚实但控制损害）
 
 3. **主要修改**
    - 列表总结
@@ -205,6 +220,7 @@
 所有输出放在 `research/` 目录：
 - `manuscript.md` - 论文主体
 - `rebuttal.md` - 审稿回复
+- `evidence-ledger.md` - 证据账本（Claim 与证据绑定）
 - `slides.pdf` - 报告幻灯片
 - `poster.pdf` - 会议海报
 

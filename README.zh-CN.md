@@ -22,7 +22,9 @@ Scholar-3 为使用 Claude Code 的学术研究提供了一种结构化的方法
 - **三阶段研究工作流** - 清晰分离研究生命周期的各个阶段
 - **结构化模板** - 即用型模板，涵盖提案、实验报告、手稿和回复信
 - **渐进式展示** - 从简单命令开始，需要时深入了解详细工作流
-- **代理集成** - 利用现有的 Claude 代理（literature-reviewer、data-analyst、rebuttal-writer 等）
+- **严格性机制** - 真话与可核验约束（不编造引用/结果、结论必须有证据指针、阶段闸门 Exit Criteria）
+- **证据账本** - `research/evidence-ledger.md` 贯穿三阶段，把 Claim 与证据绑定，减少返工
+- **代理集成（可选）** - 可利用现有 Claude 代理（literature-reviewer、data-analyst、rebuttal-writer 等）；若环境未配置也可降级运行
 
 ## 安装
 
@@ -61,7 +63,7 @@ cp -r scholar-3/commands/* ~/.claude/commands/
 - 推导数学公式
 - 设计快速验证实验
 
-输出：`research/idea-proposal.md`
+输出：`research/idea-proposal.md`、`research/evidence-ledger.md`
 
 ### 第二阶段：实验
 

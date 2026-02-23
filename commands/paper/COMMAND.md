@@ -11,7 +11,9 @@ tags: [writing, paper, rebuttal]
 
 - 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
 - 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 每题必须有自由文本兜底：
+  - 若运行环境自带 `Other`/自由输入，则直接使用；
+  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
 - 在生成长文本（大段论文内容、rebuttal 成稿）前，先用结构化提问确认写作状态、目标风格与本次优先输出。
 
 ## 入口问诊（先问再写）
@@ -80,7 +82,10 @@ tags: [writing, paper, rebuttal]
 
 ## 输出
 
-论文主体：`research/manuscript.md`
+输出产物（按需生成）：
+- `research/manuscript.md`
+- `research/rebuttal.md`
+- `research/evidence-ledger.md`（Claim → Evidence 指针更新）
 
 - Abstract
 - Introduction
@@ -90,7 +95,7 @@ tags: [writing, paper, rebuttal]
 - Conclusion
 - Status
 
-Rebuttal: 使用 `templates/rebuttal.md`
+Rebuttal: 使用 `templates/rebuttal.md` 作为骨架
 
 ## 护栏
 

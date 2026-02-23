@@ -1,8 +1,20 @@
 # Paper: [标题]
 
-**Venue**: [会议/期刊名称]
+**Venue**: [NeurIPS/ICML/ICLR/YYYY 或期刊名称]
 **Status**: Draft / Submitted / Under Review / Accepted / Rejected
 **Submitted**: YYYY-MM-DD
+
+---
+
+## Claim → Evidence Map（强制）
+
+> 规则：没有证据指针（Pointer）的 Claim 不允许写进 Abstract/Contributions。
+
+| Claim（论文要说的话） | Evidence（表/图/定理/消融/统计） | Pointer（Table/Fig/路径） | Status |
+|---|---|---|---|
+| 贡献 1: ... | 主结果表 + CI（≥3 seeds） | Table 1 / logs/run_001/metrics.json | verified/partial |
+| 贡献 2: ... | 消融实验 | Fig 3 / Table 2 | planned |
+| 贡献 3: ... | 诊断/案例/理论 | Fig 4 / Appendix A | planned |
 
 ---
 
@@ -32,12 +44,16 @@
 2. **贡献 2**: [具体描述]
 3. **贡献 3**: [具体描述]
 
+> 每条贡献必须能指向 Claim → Evidence Map 中的证据指针。
+
 ### Overview
 - 简要概述论文结构
 
 ---
 
 ## Related Work
+
+> 每条关键引用必须可核验：标题、作者、年份、venue/arXiv号、可点击链接（或 DOI）。
 
 ### [领域 1]
 - 主要方法 A
@@ -113,18 +129,18 @@ Algorithm OurMethod(input):
 
 | Method | Dataset A | Dataset B |
 |--------|-----------|-----------|
-| Baseline A | 0.75 | 0.68 |
-| Baseline B | 0.78 | 0.71 |
-| **Ours** | **0.82** | **0.76** |
+| Baseline A | [mean±std/CI] | ... |
+| Baseline B | [mean±std/CI] | ... |
+| **Ours** | **[mean±std/CI]** | ... |
 
 ### Analysis
 
 **Ablation Study**
 | 变体 | Metric | Δ |
 |-----|--------|---|
-| Full | 0.82 | - |
-| w/o X | 0.79 | -0.03 |
-| w/o Y | 0.77 | -0.05 |
+| Full | [value] | - |
+| w/o X | [value] | [delta] |
+| w/o Y | [value] | [delta] |
 
 **Case Study**
 - [具体案例分析]

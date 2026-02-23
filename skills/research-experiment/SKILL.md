@@ -8,6 +8,7 @@ metadata:
     - research/idea-proposal.md
   outputs:
     - research/experiment-report.md
+    - research/evidence-ledger.md
 ---
 
 进入实验验证模式。设计实验。实现代码。运行并分析结果。
@@ -20,9 +21,32 @@ metadata:
 
 - 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
 - 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 每题必须有自由文本兜底：
+  - 若运行环境自带 `Other`/自由输入，则直接使用；
+  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
 - 在调用子 agent（如 `architect`、`data-analyst`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
 - 用户每次选择后，先复述“你选择了 X，所以接下来我会做 Y”，再开始写代码、跑实验或做分析。
+
+## Truthfulness & Verification Contract（不可协商）
+
+- **不编造文献**：论文标题/作者/年份/venue/arXiv/DOI/链接只能来自检索结果或用户材料；否则必须标注为“未验证候选”，并继续检索/追问核验信息。
+- **不编造实验结果**：没有日志/表格/代码运行输出，就只能写“计划/预期/假设”，不得写“提升了 X%”等确定性结论。
+- **每个关键结论必须有证据指针**：例如 `Table 2 / Fig 3 / logs/run_042/metrics.json`。没有指针就不能下结论。
+- **信息不足就停**：先用结构化提问补齐，再继续推进；禁止用“合理猜测”冒充事实。
+
+## 子 agent 可用性与降级策略
+
+- 若 `architect` 可用：先用结构化提问明确框架/数据/指标/预算，再调用 `architect` 输出架构。
+- 若 `architect` 不可用：由主 agent 输出同等结构的架构设计，至少包含：
+  - 模块划分（data/model/train/eval/utils）
+  - 关键接口（输入/输出/配置 schema）
+  - 数据流（从数据到指标的路径）
+  - 风险点与验证点（最小 smoke test）
+- 若 `data-analyst` 可用：在收集好产物类型（表格/日志/曲线）后调用。
+- 若 `data-analyst` 不可用：由主 agent 输出固定结构的分析：
+  - 指标定义与统计检验建议（t-test/bootstrap/CI）
+  - 可视化清单（训练曲线、对比柱状、消融）
+  - 结论边界（哪些结论能下，哪些需要更多证据）
 
 ## 入口问诊（先问再做）
 
@@ -93,6 +117,7 @@ metadata:
 - 若 `exp_input=有 idea-proposal.md`：先读取 `research/idea-proposal.md`，抽取“假设、变量、指标、验证计划”，再进入实验设计或实现。
 - 若需要生成报告：使用 `templates/experiment-report.md` 作为结构生成 `research/experiment-report.md`，并在末尾写清“种子、命令、环境、产物路径”。
 - `exp_rigor=严格记录` 时，优先保证：命令可复跑、配置可追溯、结果可复现，再追求更多实验规模。
+- 在本阶段创建/更新 `research/evidence-ledger.md`：把每个 Claim 绑定到对应证据（表/图/日志路径），并维护 `planned/verified/falsified` 状态。
 
 ## 核心活动
 
@@ -106,7 +131,7 @@ metadata:
 
 **代码实现**
 - 调用 architect agent 设计项目架构
-- 遵循 coding-style.md 编写代码
+- 遵循 `references/coding-style.md` 编写代码
 - 实现实验逻辑
 - 编写测试确保正确性
 
@@ -183,7 +208,7 @@ metadata:
 
 ## 可复现性要求
 
-- 设置随机种子（见 experiment-reproducibility.md）
+- 设置随机种子与复现记录（见 `references/experiment-reproducibility.md`）
 - 记录环境信息（pip freeze）
 - 保存完整配置
 - 保存 checkpoint
@@ -224,6 +249,15 @@ metadata:
 ```
 
 ---
+
+## Exit Criteria（Experiment → Paper，顶会偏严默认）
+
+只有满足以下条件，才允许进入 `/paper`：
+- [ ] 主结果至少 3 个 seeds（或等价 bootstrap），并报告方差或置信区间（CI）
+- [ ] 至少 1 个 sanity check（如标签打乱/输入随机化/容量极端对照）
+- [ ] 至少 1 个消融实验（ablation）
+- [ ] 至少 1 个失败案例或局限性（写进报告与 `research/evidence-ledger.md`）
+- [ ] 可复现包完整：命令、配置、环境、产物路径齐全（见 `references/experiment-reproducibility.md`）
 
 ## 护栏
 

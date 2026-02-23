@@ -57,6 +57,15 @@
 - 变量定义表
 - 评估计划
 
+### 最低限度预注册（推荐）
+
+为减少 p-hacking / cherry-picking，至少明确并写进报告：
+- Primary metric（唯一主指标，写死）
+- Tuning protocol（只在 val 上调参，不触碰 test）
+- Number of runs（默认 ≥3 seeds）
+- Stopping rule（early stop 规则）
+- Report rule（失败也要记录，不许只挑最好）
+
 ## 阶段 2: 架构设计
 
 ### 使用 architect agent
@@ -92,7 +101,7 @@ src/
 ## 阶段 3: 代码实现
 
 ### 遵循代码规范
-参考 `coding-style.md` 中的规范。
+参考 `coding-style.md` 中的规范（同目录），并以可复现性要求为最高优先级（见 `experiment-reproducibility.md`）。
 
 ### 核心规范
 1. **文件大小** - 不超过 400 行
@@ -195,10 +204,19 @@ checkpoints/
 
 ## 向下一阶段过渡
 
-当满足以下条件时，可以进入论文撰写阶段：
-- [ ] 实验完成
-- [ ] 结果分析完整
-- [ ] 假设得到验证
-- [ ] 报告生成完毕
+### 证据账本（Evidence Ledger）
+
+在实验阶段持续更新 `research/evidence-ledger.md`：
+- 每条 Claim 绑定对应证据（表/图/定理/日志路径）
+- 对证据状态做标注：`planned/partial/verified/falsified`
+
+### Exit Criteria（Experiment → Paper，顶会偏严默认）
+
+当满足以下条件时，才可以进入论文撰写阶段：
+- [ ] 主结果至少 3 个 seeds（或等价 bootstrap），并报告方差或置信区间（CI）
+- [ ] 至少 1 个 sanity check（如标签打乱/输入随机化/容量极端对照）
+- [ ] 至少 1 个消融实验（ablation）
+- [ ] 至少 1 个失败案例或局限性（写进 report 与 ledger）
+- [ ] 可复现包完整：命令、配置、环境、产物路径齐全（见 `experiment-reproducibility.md`）
 
 使用 `/paper` 命令进入论文撰写模式。

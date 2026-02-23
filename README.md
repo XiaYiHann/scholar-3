@@ -22,7 +22,9 @@ Scholar-3 provides a structured approach to academic research using Claude Code.
 - **Three-phase research workflow** - Clear separation of concerns across the research lifecycle
 - **Structured templates** - Ready-to-use templates for proposals, experiment reports, manuscripts, and rebuttals
 - **Progressive disclosure** - Start with simple commands, dive into detailed workflows when needed
-- **Agent integration** - Leverages existing Claude agents (literature-reviewer, data-analyst, rebuttal-writer, etc.)
+- **Strictness mechanisms** - Truthfulness + verifiability (no fabricated citations/results, evidence pointers required, phase Exit Criteria)
+- **Evidence Ledger** - `research/evidence-ledger.md` ties claims to evidence across phases
+- **Agent integration (optional)** - Can leverage existing Claude agents (literature-reviewer, data-analyst, rebuttal-writer, etc.); falls back if not configured
 
 ## Installation
 
@@ -61,7 +63,7 @@ Enter Idea exploration mode. Use this to:
 - Derive mathematical formulas
 - Design quick validation experiments
 
-Output: `research/idea-proposal.md`
+Output: `research/idea-proposal.md`, `research/evidence-ledger.md`
 
 ### Phase 2: Experiment
 
@@ -127,7 +129,8 @@ scholar-3/
 │   ├── research-discover/      # Discovery phase skill
 │   │   ├── SKILL.md
 │   │   ├── templates/
-│   │   │   └── idea-proposal.md
+│   │   │   ├── idea-proposal.md
+│   │   │   └── evidence-ledger.md
 │   │   └── references/
 │   │       └── discovery-workflow.md
 │   ├── research-experiment/    # Experiment phase skill
@@ -135,7 +138,9 @@ scholar-3/
 │   │   ├── templates/
 │   │   │   └── experiment-report.md
 │   │   └── references/
-│   │       └── experiment-workflow.md
+│   │       ├── experiment-workflow.md
+│   │       ├── coding-style.md
+│   │       └── experiment-reproducibility.md
 │   └── research-paper/         # Paper phase skill
 │       ├── SKILL.md
 │       ├── templates/
@@ -160,6 +165,7 @@ Scholar-3 includes structured templates for each phase:
 | Template | Purpose | Location |
 |----------|---------|----------|
 | Idea Proposal | Document research ideas | `skills/research-discover/templates/` |
+| Evidence Ledger | Track claims and evidence | `skills/research-discover/templates/` |
 | Experiment Report | Document experiment results | `skills/research-experiment/templates/` |
 | Manuscript | Academic paper structure | `skills/research-paper/templates/` |
 | Rebuttal | Review response letter | `skills/research-paper/templates/` |

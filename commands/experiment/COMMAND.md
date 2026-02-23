@@ -11,7 +11,9 @@ tags: [experiment, coding, analysis]
 
 - 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
 - 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 每题必须有自由文本兜底：
+  - 若运行环境自带 `Other`/自由输入，则直接使用；
+  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
 - 在调用子 agent（如 `architect`、`data-analyst`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
 
 ## 入口问诊（先问再做）
@@ -45,7 +47,7 @@ tags: [experiment, coding, analysis]
 
 **代码实现**
 - 调用 architect agent 设计项目架构
-- 遵循 coding-style.md 编写代码
+- 遵循 `skills/research-experiment/references/coding-style.md` 编写代码
 - 实现实验逻辑
 - 编写测试确保正确性
 
@@ -85,10 +87,13 @@ tags: [experiment, coding, analysis]
 - 保存完整配置
 - 保存 checkpoint
 - 记录运行命令
+- 详见 `skills/research-experiment/references/experiment-reproducibility.md`
 
 ## 输出
 
-实验完成后，生成 `research/experiment-report.md`：
+实验完成后，生成：
+- `research/experiment-report.md`
+- `research/evidence-ledger.md`（更新每条 Claim 的证据指针）
 
 - Setup (硬件、环境、配置)
 - Results (结果表格、图表)

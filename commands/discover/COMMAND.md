@@ -11,7 +11,9 @@ tags: [ideation, literature, discovery]
 
 - 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
 - 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 每题必须有自由文本兜底：
+  - 若运行环境自带 `Other`/自由输入，则直接使用；
+  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
 - 在调用子 agent（如 `literature-reviewer`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
 
 ## 入口问诊（先问再做）
@@ -67,12 +69,16 @@ tags: [ideation, literature, discovery]
 
 ## 输出
 
-当探索达到清晰度时，可以生成 `research/idea-proposal.md`：
+当探索达到清晰度时，可以生成：
+- `research/idea-proposal.md`
+- `research/evidence-ledger.md`（Claim 与证据绑定）
 
 - Problem Statement
+- Problem Normal Form（task/dataset/metric/baseline/证伪条件）
 - Literature Review
 - Mathematical Foundation
 - Validation Plan
+- Kill Criteria（停止条件）
 - Next Steps
 
 ## 护栏

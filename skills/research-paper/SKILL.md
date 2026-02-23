@@ -6,8 +6,11 @@ metadata:
   phase: paper
   inputs:
     - research/experiment-report.md
+    - research/evidence-ledger.md
   outputs:
     - research/manuscript.md
+    - research/rebuttal.md
+    - research/evidence-ledger.md
 ---
 
 进入论文撰写模式。撰写论文。准备投稿。回复审稿。
@@ -20,9 +23,30 @@ metadata:
 
 - 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
 - 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 不在选项中显式提供 “Other”；让平台 UI 提供自由文本兜底。遇到 `Other` 时，继续用 2-3 选项追问把回答结构化后再继续。
+- 每题必须有自由文本兜底：
+  - 若运行环境自带 `Other`/自由输入，则直接使用；
+  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
 - 在生成长文本（大段论文内容、rebuttal 成稿）前，先用结构化提问确认写作状态、目标风格与本次优先输出。
 - 在调用子 agent（如 `paper-miner`、`rebuttal-writer`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
+
+## Truthfulness & Verification Contract（不可协商）
+
+- **不编造引用**：标题/作者/年份/venue/arXiv/DOI/链接只能来自检索结果或用户材料；否则必须标注为“未验证候选”，并继续检索/追问核验信息。
+- **不编造结果**：没有实验日志/表格/代码运行输出，就只能写“计划/预期/假设”，不得写确定性数值结论。
+- **Abstract/Contributions 只允许写有证据的 Claim**：每条贡献必须能指向证据指针（表/图/定理/日志路径）。
+- **信息不足就停**：先用结构化提问补齐，再继续推进；禁止用“合理猜测”冒充事实。
+
+## 证据账本（Evidence Ledger）
+
+- 论文写作前必须读取/更新 `research/evidence-ledger.md`。
+- 强制先产出一张 `Claim → Evidence Map`（见 `templates/manuscript.md`），没有证据的 Claim 不允许写进 Abstract/Contributions。
+
+## 子 agent 可用性与降级策略
+
+- 若 `paper-miner` 可用：在确认目标风格与本次重点后调用，用于提取写作模式与结构建议。
+- 若 `paper-miner` 不可用：主 agent 直接按 `templates/manuscript.md` 骨架输出大纲，并强制先完成 Claim → Evidence Map。
+- 若 `rebuttal-writer` 可用：先结构化收集审稿意见与可补实验范围，再调用生成 rebuttal 草稿。
+- 若 `rebuttal-writer` 不可用：主 agent 按 `templates/rebuttal.md` 逐条生成，且每条回复必须包含 Acknowledge/Action/Evidence/Residual limitation 四段。
 
 ## 入口问诊（先问再写）
 
@@ -83,6 +107,7 @@ metadata:
 - `paper_state=从零起草` 或 `已有草稿需改写`：优先使用 `templates/manuscript.md` 作为骨架生成/重写 `research/manuscript.md`。
 - `paper_state=准备 rebuttal`：优先使用 `templates/rebuttal.md` 作为骨架生成 rebuttal 草稿，并附“主要修改/新增实验”清单。
 - 在写 “Method/Experiments” 等长段落前，先把本次 `paper_focus` 对应的产出范围确认清楚，再进入长文本生成。
+- 若缺少 `research/experiment-report.md` 或证据不足：先回到 `/experiment` 补齐实验与证据，再继续写作。
 
 ## 核心活动
 
@@ -227,7 +252,7 @@ metadata:
 
 ## Status
 - 当前状态: Draft / Submitted / Under Review / Accepted
-- 投稿 venue: NeurIPS 2025
+- 投稿 venue: [NeurIPS/ICML/ICLR/YYYY]
 - 提交日期: YYYY-MM-DD
 ```
 

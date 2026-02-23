@@ -7,6 +7,13 @@
 ---
 
 ## Setup
+### Pre-registration（最低限度，强制）
+
+- Primary metric（唯一主指标）: [写死，不随意更换]
+- Tuning protocol（调参协议）: [只在 val 上调参，不触碰 test]
+- Number of runs（默认 ≥3 seeds）: [3 / 5 / ...]
+- Stopping rule（early stop 规则）: [规则 + patience]
+- Report rule（报告规则）: [失败也要记录；不许只挑最好]
 
 ### 硬件
 - GPU: [型号]
@@ -42,9 +49,14 @@ experiment:
 
 | Method | Metric 1 | Metric 2 | Metric 3 |
 |--------|----------|----------|----------|
-| Baseline A | 0.75 | 0.68 | 1.23 |
-| Baseline B | 0.78 | 0.71 | 1.15 |
-| **Ours** | **0.82** | **0.76** | **1.05** |
+| Baseline A | [mean±std/CI] | ... | ... |
+| Baseline B | [mean±std/CI] | ... | ... |
+| **Ours** | **[mean±std/CI]** | ... | ... |
+
+**Evidence pointers（强制）**
+- Table: [Table X]
+- Logs: `logs/run_xxx/metrics.json`
+- Config: `logs/run_xxx/config.yaml`
 
 ### 可视化
 ```
@@ -60,19 +72,19 @@ experiment:
 
 ### 统计显著性检验
 - 方法: t-test / bootstrap
-- 结果: p < 0.05 (显著)
+- 结果: [p-value / CI / effect size]
 
 ### 消融实验
 
 | 变体 | Metric | 说明 |
 |-----|--------|-----|
-| Full | 0.82 | 完整方法 |
-| w/o component A | 0.79 | -0.03 |
-| w/o component B | 0.77 | -0.05 |
+| Full | [value] | 完整方法 |
+| w/o component A | [value] | [delta] |
+| w/o component B | [value] | [delta] |
 
 ### 与 Baseline 对比
-- 相比 Baseline A 提升: +X%
-- 相比 Baseline B 提升: +Y%
+- 相比 Baseline A 提升: [+X% / CI]
+- 相比 Baseline B 提升: [+Y% / CI]
 - 分析: [解释为什么有提升]
 
 ---
@@ -91,6 +103,19 @@ experiment:
 - [ ] 改进点 1
 - [ ] 扩展实验 2
 - [ ] 准备写论文
+
+---
+
+## Sanity Checks（至少 1 个，强制）
+
+- [ ] Label shuffle（标签打乱）
+- [ ] Input randomization（输入随机化/置零）
+- [ ] Capacity sanity（极小/极大模型对照）
+- [ ] Overfit tiny subset（极小子集拟合）
+
+记录：
+- 现象/结论: ...
+- Evidence pointer: [Fig/Table/路径]
 
 ---
 

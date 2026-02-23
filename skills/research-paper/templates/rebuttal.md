@@ -21,14 +21,20 @@
 感谢您的积极评价和建设性意见。
 
 ### Point 1: [问题]
-**Response**: [回复]
+**Acknowledge**: [我理解你担心什么]  
+**Action**: [我做了什么修改/新增了什么实验]  
+**Evidence**: [结果是什么，必须给 Table/Fig/路径/位置]  
+**Residual limitation**: [仍然不能解决的部分（诚实但控制损害）]
 
 我们已相应修改：
 - 位置: Section X, Page Y, Line Z
 - 修改内容: [描述]
 
 ### Point 2: [问题]
-**Response**: [回复]
+**Acknowledge**: [我理解你担心什么]  
+**Action**: [我做了什么修改/新增了什么实验]  
+**Evidence**: [结果是什么，必须给 Table/Fig/路径/位置]  
+**Residual limitation**: [仍然不能解决的部分（诚实但控制损害）]
 
 我们已添加新实验:
 - 详见: Appendix, Section X
@@ -39,17 +45,26 @@
 ## Response to Reviewer #2
 
 ### Point 1: [问题]
-**Response**: [回复]
+**Acknowledge**: ...  
+**Action**: ...  
+**Evidence**: ...  
+**Residual limitation**: ...
 
 ### Point 2: [问题]
-**Response**: [回复]
+**Acknowledge**: ...  
+**Action**: ...  
+**Evidence**: ...  
+**Residual limitation**: ...
 
 ---
 
 ## Response to Reviewer #3
 
 ### Point 1: [问题]
-**Response**: [回复]
+**Acknowledge**: ...  
+**Action**: ...  
+**Evidence**: ...  
+**Residual limitation**: ...
 
 ---
 
