@@ -1,0 +1,14 @@
+{
+  "skills": [
+    "skills/research-discover",
+    "skills/research-experiment",
+    "skills/research-paper"
+  ],
+  "commands": [
+    "commands/discover",
+    "commands/experiment",
+    "commands/paper"
+  ],
+  "agents": {},
+  "hooks": {}
+}

@@ -1,0 +1,19 @@
+# Ignore sensitive files
+settings.json
+*.env
+.env*
+
+# Ignore output files
+research/*.md
+!research/.gitkeep
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
