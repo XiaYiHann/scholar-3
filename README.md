@@ -71,6 +71,9 @@ Alternative (no global install):
 npx scholar3 init
 ```
 
+Requirements:
+- Node.js `>=20.19.0`
+
 What you get after install:
 - (Namespaced to avoid command collisions.)
 - Claude Code:

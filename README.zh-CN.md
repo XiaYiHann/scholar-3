@@ -71,6 +71,9 @@ scholar3 init
 npx scholar3 init
 ```
 
+环境要求：
+- Node.js `>=20.19.0`
+
 安装后你会得到（命令做了 namespace，避免冲突）：
 - Claude Code：
   - `/scholar3:discover`
