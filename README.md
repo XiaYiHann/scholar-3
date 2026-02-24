@@ -58,16 +58,61 @@ If you previously used Scholar-3 v1 artifact names:
 
 ## Installation
 
-### Via Git Clone (Recommended)
+### NPM (Recommended)
 
 ```bash
-cd ~/.claude
+npm i -g scholar3
+scholar3 init
+```
+
+Alternative (no global install):
+
+```bash
+npx scholar3 init
+```
+
+What you get after install:
+- (Namespaced to avoid command collisions.)
+- Claude Code:
+  - `/scholar3:discover`
+  - `/scholar3:experiment`
+  - `/scholar3:apply`
+  - `/scholar3:verify`
+  - `/scholar3:paper`
+- Codex:
+  - `/scholar3-discover`
+  - `/scholar3-experiment`
+  - `/scholar3-apply`
+  - `/scholar3-verify`
+  - `/scholar3-paper`
+
+Project scaffold (spec-only, in your current repo):
+
+```bash
+scholar3 project-init
+```
+
+Status / uninstall:
+
+```bash
+scholar3 status
+scholar3 uninstall
+```
+
+Common overrides:
+- Codex home: `$CODEX_HOME` or `--codex-home <path>`
+- Claude home: `--claude-home <path>`
+- Non-interactive: `--tools claude,codex`
+
+### Via Git Clone
+
+```bash
 git clone https://github.com/XiaYiHann/scholar-3.git
 ```
 
-### Manual Installation
+### Manual Installation (legacy)
 
-Copy to your `.claude/` directory:
+Copy to your Claude directory (this installs un-namespaced commands like `/discover`):
 
 ```bash
 cp -r scholar-3/skills/* ~/.claude/skills/

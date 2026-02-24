@@ -1,0 +1,34 @@
+{
+  "name": "scholar3",
+  "version": "0.1.0",
+  "description": "Scholar-3: OPSX-inspired, spec-driven research workflow (CLI installer for Claude Code and Codex)",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "scholar3": "bin/scholar3.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "skills/",
+    "commands/",
+    "scholar/",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "AGENTS.md",
+    "settings.json.template",
+    "third_party/README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^5.5.0",
+    "commander": "^12.1.0",
+    "yaml": "^2.6.1"
+  }
+}

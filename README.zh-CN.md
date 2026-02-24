@@ -58,6 +58,53 @@ Paper：
 
 ## 安装
 
+### NPM（推荐）
+
+```bash
+npm i -g scholar3
+scholar3 init
+```
+
+或（不全局安装）：
+
+```bash
+npx scholar3 init
+```
+
+安装后你会得到（命令做了 namespace，避免冲突）：
+- Claude Code：
+  - `/scholar3:discover`
+  - `/scholar3:experiment`
+  - `/scholar3:apply`
+  - `/scholar3:verify`
+  - `/scholar3:paper`
+- Codex：
+  - `/scholar3-discover`
+  - `/scholar3-experiment`
+  - `/scholar3-apply`
+  - `/scholar3-verify`
+  - `/scholar3-paper`
+
+项目脚手架（仅 spec，在当前项目目录）：
+
+```bash
+scholar3 project-init
+```
+
+查看状态 / 卸载：
+
+```bash
+scholar3 status
+scholar3 uninstall
+```
+
+常用覆盖参数：
+- Codex home：`$CODEX_HOME` 或 `--codex-home <path>`
+- Claude home：`--claude-home <path>`
+- 非交互：`--tools claude,codex`
+
+### Git Clone
+
 ```bash
 cd ~/.claude
 git clone https://github.com/XiaYiHann/scholar-3.git
@@ -69,6 +116,8 @@ git clone https://github.com/XiaYiHann/scholar-3.git
 cp -r scholar-3/skills/* ~/.claude/skills/
 cp -r scholar-3/commands/* ~/.claude/commands/
 ```
+
+（该方式会安装未命名空间的命令，例如 `/discover`。）
 
 ## Scholar-3 spec config/schema（可选）
 
