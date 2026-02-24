@@ -2,11 +2,15 @@
   "skills": [
     "skills/research-discover",
     "skills/research-experiment",
+    "skills/research-apply",
+    "skills/research-verify",
     "skills/research-paper"
   ],
   "commands": [
     "commands/discover",
     "commands/experiment",
+    "commands/apply",
+    "commands/verify",
     "commands/paper"
   ],
   "agents": {},

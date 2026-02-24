@@ -1,0 +1,24 @@
+schema: scholar-research
+
+context: |
+  This workflow is for research projects.
+  Source of truth (in the user's project):
+    - research/idea.md (single global idea spec)
+    - research/idea.meta.yaml (state: draft|frozen, version, counters)
+    - research/evidence-ledger.md (Claim→Evidence→Pointer ledger)
+  Phase execution units:
+    - research/proposals/Pxx-*/ (each proposal is a phase package)
+
+rules:
+  idea:
+    - Never fabricate citations. If not verifiable, mark UNVERIFIED.
+    - Maintain stable IDs: H1/H2..., F1/F2..., C1/C2...
+    - If idea is frozen, do not edit idea.md. Use idea-amendments.
+  tasks:
+    - Use checkbox format '- [ ] X.Y ...' exactly; otherwise progress tracking fails.
+    - Each task must include command, expected outputs, and acceptance criteria.
+  experiment_report:
+    - No result statements without artifact pointers (logs/configs/figures/tables).
+    - Report failures and negative results; no cherry-picking.
+  manuscript:
+    - Abstract/Contributions may only use VERIFIED claims from evidence-ledger.md.

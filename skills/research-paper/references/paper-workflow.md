@@ -1,238 +1,49 @@
-# Paper Workflow 详细指南
+# Paper Workflow (Evidence-gated)
 
 本文档提供 `research-paper` 技能的详细工作流程说明。
 
-## 工作流概述
+> 核心原则：先做 Claim→Evidence→Pointer 闸门，再写任何 Abstract/Contributions。
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Paper Phase Workflow                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │
-│   │  大纲设计   │───▶│  论文写作   │───▶│  论文自审   │       │
-│   └─────────────┘    └─────────────┘    └─────────────┘       │
-│          │                                    │                │
-│          ▼                                    ▼                │
-│   ┌─────────────┐                    ┌─────────────┐          │
-│   │  投稿准备   │                    │  格式检查   │          │
-│   └─────────────┘                    └─────────────┘          │
-│          │                                                       │
-│          ▼                                                       │
-│   ┌─────────────┐                                               │
-│   │  投稿提交   │                                                │
-│   └─────────────┘                                               │
-│          │                                                       │
-│          ▼ (收到审稿意见)                                         │
-│   ┌─────────────┐                                               │
-│   │  回复审稿   │                                                │
-│   └─────────────┘                                               │
-│          │                                                       │
-│          ▼ (接收)                                                │
-│   ┌─────────────┐                                               │
-│   │  准备报告   │                                                │
-│   └─────────────┘                                               │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+## 输入（最小）
 
-## 阶段 1: 大纲设计
+- `research/evidence-ledger.md`
+- 至少一个 proposal 的：
+  - `research/proposals/Pxx-*/experiment-report.md`
+  - `research/proposals/Pxx-*/artifacts/**`（logs/tables/figures 等）
 
-### 目标
-构建清晰的论文结构。
+（可选）：
+- `research/idea.md`（Problem Setup / Protocol）
 
-### 标准结构 (NeurIPS/ICML/ICLR)
-1. **Abstract** - 200-250 words
-2. **Introduction** - 动机、问题、贡献
-3. **Related Work** - 文献综述
-4. **Method** - 方法描述
-5. **Experiments** - 实验结果
-6. **Conclusion** - 总结与展望
-7. **Appendix** - 补充材料
+## 强制流程
 
-### 使用 paper-miner agent
-调用 `paper-miner` agent 提取写作模式。
+### 1) 生成 Claim → Evidence Map
 
-### 输出
-- 论文大纲
-- 各章节要点
-- 引用论文列表
+输出：
+- `research/paper/claim-evidence-map.md`
 
-## 阶段 2: 论文写作
+硬规则：
+- Abstract/Contributions 只能引用 ledger 中 status=`verified` 的 claim。
+- 每条贡献必须包含可复现 pointer（表/图/日志/证明路径）。
 
-### 写作原则
-1. **清晰第一** - 让读者容易理解
-2. **诚实报告** - 如实报告结果和局限性
-3. **逻辑连贯** - 故事线清晰
-4. **图表精美** - 一图胜千言
+### 2) 写 Manuscript
 
-### Claim → Evidence Map（强制）
+输出：
+- `research/paper/manuscript.md`
 
-在写 Abstract/Contributions/主结果之前，必须先完成一张映射表：
+要求：
+- Related Work 不得编造引用；每条关键引用必须可核验（URL/arXiv/DOI）。
+- Experiments 章节中所有数字都必须可追溯到 `research/proposals/Pxx-*/artifacts/**`。
 
-| Claim（论文要说的话） | Evidence（表/图/定理/消融/统计） | Pointer（Table/Fig/路径） | Status |
-|---|---|---|---|
-| ... | ... | ... | verified/partial |
+### 3)（可选）写 Rebuttal
+
+输出：
+- `research/paper/rebuttal.md`
 
 规则：
-- 没有证据指针（Pointer）的 Claim 不允许写进 Abstract/Contributions
-- 没有日志/表格/运行输出时，只能写计划/预期，不能写确定性数字结论
-- 写作前读取并更新 `research/evidence-ledger.md`（证据账本）
+- 不得发明新结果；任何新主张必须有证据指针。
 
-### 章节写作技巧
+## 常见错误（Fail-fast）
 
-**Abstract**
-- 背景 (1-2 句)
-- 问题 (1 句)
-- 方法 (2-3 句)
-- 结果 (1-2 句)
-- 结论 (1 句)
-
-**Introduction**
-- Hook - 吸引读者
-- Gap - 研究空白
-- Solution - 我们的方案
-- Contributions - 明确列出 2-3 条
-
-**Method**
-- Problem Setup - 问题定义
-- Method Description - 方法描述
-- Theoretical Analysis - 理论分析
-
-**Experiments**
-- Setup - 数据集、指标、baseline
-- Results - 主要结果
-- Analysis - 消融、案例、统计
-
-### 使用模板
-使用 `templates/manuscript.md` 作为起点。
-
-### 输出
-- 论文草稿
-- 图表文件
-- 参考文献列表
-
-## 阶段 3: 论文自审
-
-### 使用 paper-self-review 技能
-调用 `paper-self-review` 进行自审。
-
-### 检查清单
-- [ ] 标题简洁有力
-- [ ] 摘要覆盖所有要点
-- [ ] 贡献明确且可验证
-- [ ] Claim → Evidence Map 完整，且每条贡献都有可核验 Pointer
-- [ ] 相关工作全面
-- [ ] 引用可核验（标题/年份/链接/arXiv/DOI 等），不包含“未验证候选”
-- [ ] 方法描述清晰可复现
-- [ ] 实验设计合理
-- [ ] 结果分析充分
-- [ ] 局限性诚实讨论
-- [ ] 参考文献完整
-
-### 输出
-- 自审报告
-- 修改建议
-
-## 阶段 4: 投稿准备
-
-### 准备材料
-1. **主论文** - PDF 格式
-2. **Supplementary Material** - 补充材料
-3. **Code** - GitHub 仓库
-4. **Checklist** - 会议 checklist
-5. **Cover Letter** - (可选) 推荐信
-
-### 格式检查
-- 页数限制
-- 字体大小
-- 图表分辨率
-- 引用格式
-
-### 输出
-- 投稿材料包
-- 格式检查通过
-
-## 阶段 5: 投稿提交
-
-### 提交流程
-1. 创建投稿系统账号
-2. 填写论文信息
-3. 上传材料
-4. 选择 reviewer
-5. 确认提交
-
-### 输出
-- 投稿确认
-- 论文编号
-
-## 阶段 6: 回复审稿
-
-### 使用 rebuttal-writer agent
-调用 `rebuttal-writer` agent 起草回复。
-
-### 回复策略
-1. **总体策略**
-   - 礼貌专业
-   - 承认合理意见
-   - 解释不采纳原因
-
-2. **单条回复**
-   - Acknowledge：我理解你担心什么
-   - Action：我做了什么修改/新增了什么实验
-   - Evidence：结果是什么（必须给 Table/Fig/路径/位置）
-   - Residual limitation：仍然不能解决的部分（诚实但控制损害）
-
-3. **主要修改**
-   - 列表总结
-   - 说明变化
-   - 指出位置
-
-### 使用模板
-使用 `templates/rebuttal.md` 作为起点。
-
-### 输出
-- Rebuttal letter
-- 修改后的论文
-
-## 阶段 7: 准备报告
-
-### 输出类型
-1. **Presentation Slides**
-   - 15-20 分钟版本
-   - 使用 `presentation` 技能
-
-2. **Poster**
-   - 会议海报
-   - 使用 `poster` 技能
-
-3. **Talk Script**
-   - 演讲稿
-   - 时间分配
-
-### 输出
-- Slides PDF
-- Poster PDF
-- Talk script
-
-## 输出位置
-
-所有输出放在 `research/` 目录：
-- `manuscript.md` - 论文主体
-- `rebuttal.md` - 审稿回复
-- `evidence-ledger.md` - 证据账本（Claim 与证据绑定）
-- `slides.pdf` - 报告幻灯片
-- `poster.pdf` - 会议海报
-
-## 工作流循环
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                                                                 │
-│    /discover ──▶ /experiment ──▶ /paper ──▶ Published           │
-│         ▲                                            │         │
-│         └────────────────────────────────────────────┘         │
-│                      新的想法                                     │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+- 在没有完成 claim-evidence map 前写 Abstract（违规）
+- 用没有 pointer 的句子写贡献点（违规）
+- 引用条目缺 URL/arXiv/DOI（不可核验）

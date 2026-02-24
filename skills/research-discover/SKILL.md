@@ -1,244 +1,63 @@
 ---
 name: research-discover
-description: 进入 Idea 探索模式 - 进行对话探索、文献检索、公式推导和小型验证实验。当用户想要探索新的研究想法、进行文献调研、推导数学公式或设计初步验证时使用。
-version: 1.0.0
+description: 进入 Idea 模式 - 构建/更新单一 Idea Spec（可冻结），并初始化 Evidence Ledger。
+version: 2.0.0
 metadata:
-  phase: discovery
+  phase: idea
   outputs:
-    - research/idea-proposal.md
+    - research/idea.md
+    - research/idea.meta.yaml
     - research/evidence-ledger.md
 ---
 
-进入 Idea 探索模式。深入思考。自由想象。与研究想法进行苏格拉底式对话。
+进入 Idea 模式（严格、规范驱动）。
 
-**这是研究的第一阶段：发现与探索。** 目标是从模糊的想法发展成结构化的研究提案。可以阅读论文、搜索文献、推导公式、设计小型验证实验，但不应立即开始大规模代码实现。
-
----
-
-## 交互协议（AskUserQuestion-first）
-
-- 在 Claude Code 中优先使用 `AskUserQuestion`；在 Codex 中优先使用 `request_user_input`。
-- 每轮提问 1-3 个问题；每题 2-3 个选项；需要更多分支时用多轮串联。
-- 每题必须有自由文本兜底：
-  - 若运行环境自带 `Other`/自由输入，则直接使用；
-  - 若没有，则把最后一个选项设为“自由输入（我会再结构化追问）”。
-- 在调用子 agent（如 `literature-reviewer`）前，先通过结构化提问收集参数；子 agent 不再向用户反问。
-- 用户每次选择后，先复述“你选择了 X，所以接下来我会做 Y”，再开始长输出或检索。
+你要做的不是“生成一份新 proposal”，而是维护一个**单一的、可冻结的** `research/idea.md`（Idea Spec）。
+所有后续实验/论文都必须对照它。
 
 ## Truthfulness & Verification Contract（不可协商）
+- 不编造文献：题目/作者/年份/venue/arXiv/DOI/链接只能来自检索结果或用户材料；否则标 UNVERIFIED。
+- 不编造结果：Idea 阶段只能写假设/计划/证伪条件，不得写“提升了 X%”。
+- 信息不足就停：先结构化追问补齐，再推进。
 
-- **不编造文献**：论文标题/作者/年份/venue/arXiv/DOI/链接只能来自检索结果或用户材料；否则必须标注为“未验证候选”，并继续检索/追问核验信息。
-- **不编造结果**：Discovery 阶段只能写“假设/计划/预期/证伪条件”，不能写“提升了 X%”等实验结论。
-- **关键主张必须可被证伪**：每个主假设都要给出至少 1 条明确的证伪条件（falsification）。
-- **信息不足就停**：先用结构化提问补齐，再继续推进；禁止用“合理猜测”冒充事实。
+## 核心工件（必须）
+- `research/idea.md`：单一 Idea Spec（含 H*/F*/C* IDs 与 Evaluation Protocol）
+- `research/idea.meta.yaml`：state(draft|frozen)、version、计数器
+- `research/evidence-ledger.md`：Claim→Evidence→Pointer 账本
 
-## 证据账本（Evidence Ledger）
+模板来源（仓库内）：
+- `scholar/schemas/scholar-research/templates/idea.md`
+- `scholar/schemas/scholar-research/templates/idea.meta.yaml`
+- `scholar/schemas/scholar-research/templates/evidence-ledger.md`
 
-- 在本阶段创建/初始化 `research/evidence-ledger.md`（使用 `templates/evidence-ledger.md` 作为骨架）。
-- 目标：把未来论文里可能出现的 Claim 先写下来，并标注它们目前是 `planned` 还是已有初步证据。
+## Idea-as-Spec 协议（强制）
+- 每轮与用户交互后，必须把新增信息写回 `research/idea.md` 的：
+  - Decision Log（新增/修改了什么）
+  - Open Questions（缺什么会阻塞下一步）
+  - Literature Map（新增条目，VERIFIED/UNVERIFIED）
+- 必须维护稳定 IDs：H*, F*, C*。
+- 若 `idea.meta.yaml` 为 frozen：
+  - 不得直接改 `idea.md`
+  - 只能创建 `research/idea-amendments/Axx-*.md` 并请求用户明确决策
 
-## 子 agent 可用性与降级策略
+## 入口问诊（AskUserQuestion-first）
+在 Claude Code 中优先使用 AskUserQuestion；在 Codex 中优先 request_user_input。
+每轮 1–3 题，每题 2–3 选项，并提供自由输入兜底。
 
-- 若 `literature-reviewer` 可用：先用结构化提问收集关键词/时间窗/检索深度，再调用该 agent。
-- 若 `literature-reviewer` 不可用：
-  - 输出一个“检索计划”（关键词扩展、数据库清单、筛选规则）。
-  - 要求用户提供可核验链接（arXiv/DOI/官方页面）；在用户提供前，不要编造引用。
-  - 以固定格式记录每条文献：标题、作者、年份、venue/arXiv号、链接、1-2 句总结、与本工作的关系（baseline/gap/technique）。
+建议默认问：
+1) 当前是 draft 还是要 freeze（若已有 idea）
+2) 本次目标：补 formulation / 补文献 / 补证伪条件 / 补评测协议
+3) 文献检索可用性：能 websearch 还是用户提供链接
 
-## 入口问诊（先问再做）
+## Exit Criteria（允许进入实验的闸门）
+满足以下条件才建议进入 `/experiment`：
+- 至少 1 个主假设 H1 + 至少 1 条证伪条件 F1（可操作阈值）
+- Evaluation Protocol 写死：dataset/setting + primary metric + tuning protocol
+- >= 6 篇核心文献（>=2 强 baseline），每条有可核验指针或明确 UNVERIFIED
+- Evidence ledger 至少包含 C1/C2（planned 也可，但 evidence 要写清楚）
 
-按顺序询问（可一次问 1-3 题，回答后再进入下一步）：
-
-### discover_start（起点）
-- 模糊想法（推荐）：我只有一个大方向，需要一起把问题变清晰
-- 具体问题或假设：我已有明确问题/假设，需要推到可验证的形式
-- 已有 proposal 想改：我已有 `research/idea-proposal.md`，希望复盘与增强
-
-### discover_goal（本次目标）
-- 清晰问题 + 假设（推荐）：输出可验证的研究问题、关键假设与边界
-- 文献地图 + Gap：输出核心论文清单、方法脉络与研究空白
-- 验证计划（含小实验）：输出最小验证方案、指标与预期结果
-
-### discover_output_now（本次是否生成 proposal）
-- 生成 `research/idea-proposal.md`（推荐）：本次结束前落到模板化文档
-- 先不生成：先做探索与收敛，后续再写 proposal
-- 不确定：先推进一段，到信息足够时再决定
-
-## 分岔追问模板（按需，多轮）
-
-仅在相关分支触发下面的追问；每轮保持 2-3 选项。
-
-### 文献检索分支（discover_goal=文献地图 + Gap）
-
-#### lit_depth（检索深度）
-- 快速扫 10 篇（推荐）：先找到最相关的种子论文与关键词
-- 系统梳理 30 篇：覆盖主流方向与关键变体
-- 近 2 年 SOTA：只关注最近进展与强 baseline
-
-#### lit_time_window（时间窗）
-- 近 2 年（推荐）
-- 近 5 年
-- 不限时间
-
-#### lit_keywords_source（关键词来源）
-- 你提供关键词（推荐）
-- 我根据想法生成关键词
-- 混合：你给 1-2 个，我扩展
-
-### 验证计划分支（discover_goal=验证计划）
-
-#### val_type（验证形式）
-- 最小脚本 PoC（推荐）：用最少代码/算例快速验证关键机制
-- 理论/数值推导：通过推导或数值模拟验证假设
-- 只做实验设计：先把实验变量/指标/对照组设计清楚
-
-#### val_budget（时间预算）
-- 几分钟（推荐）
-- 小于 1 小时
-- 不确定（先做最小版本）
-
-## 输出策略（强制）
-
-- 若选择 “已有 proposal 想改”：先读取 `research/idea-proposal.md`，再决定改写范围与补充项。
-- 若 `discover_output_now=生成`：使用 `templates/idea-proposal.md` 的结构生成 `research/idea-proposal.md`，并在文末附上下一步建议与进入 `/experiment` 的准入条件。
-- 同步更新 `research/evidence-ledger.md`：为每条贡献/主张写上最小证据需求（例如需要哪些表/图/日志）。
-- 生成 proposal 时强制包含：Problem Normal Form（task/dataset/metric/baseline/证伪条件）与 Kill Criteria（停止条件）。
-
-## Exit Criteria（Discover → Experiment，顶会偏严默认）
-
-只有满足以下条件，才允许进入 `/experiment`：
-- [ ] 1 个主假设 + 1 个明确证伪条件（出现什么现象就判定假设失败）
-- [ ] 明确 task/dataset/metric（或理论命题的定义域/结论形式）
-- [ ] ≥6 篇核心文献（其中 ≥2 篇强 baseline），每篇含可核验指针（链接/arXiv号等）与 1-2 句“为什么相关”
-- [ ] 最小验证方案：输入、输出、对照组、预期现象、失败解释路径（失败时下一步怎么查）
-
-## 核心活动
-
-根据探索的内容，可能会进行以下活动：
-
-**对话探索**
-- 提出澄清性问题，帮助用户明确研究方向
-- 挑战假设，重新构建问题
-- 寻找类比和相近工作
-- 可视化研究思路（使用 ASCII 图表）
-
-**文献检索**
-- 使用 literature-reviewer agent 搜索相关论文
-- 分析当前研究状态和空白
-- 识别关键参考文献
-- 构建文献地图
-
-**数学推导**
-- 推导关键公式
-- 定义符号和假设
-- 讨论理论保证
-- 验证数学一致性
-
-**小型验证**
-- 设计概念验证实验
-- 规划最小可行验证
-- 预期结果分析
-- 确定验证方法
-
----
-
-## 姿态
-
-- **好奇而非说教** - 提出自然产生的问题，不要照本宣科
-- **开放话题而非审问** - 浮现多个有趣的方向，让用户选择产生共鸣的部分
-- **可视化** - 在有助于澄清思路时大方使用 ASCII 图表
-- **批判性思维** - 质疑假设，包括用户的和你自己的
-- **务实** - 探索应建立在现有研究基础上，而非空中楼阁
-
----
-
-## 可能的切入点
-
-**用户提出一个模糊的想法：**
-```
-User: 我想研究如何让 LLM 更好地进行数学推理
-
-You: 数学推理是一个很大的领域。让我想想...
-
-      数 学 推 理 谱 系
-      ═════════════════════════════════════
-
-         计算                推理                证明
-          │                   │                 │
-          ▼                   ▼                 ▼
-      ┌────────┐         ┌────────┐        ┌────────┐
-      │  算术  │         │  逻辑  │        │  定理  │
-      │  运算  │         │  推演  │        │  证明  │
-      └────────┘         └────────┘        └────────┘
-          │                   │                 │
-         简单                中等                复杂
-
-      你的想法倾向于哪里？是否有特定的数学领域？
-```
-
-**用户想要进行文献调研：**
-```
-User: 帮我搜索关于 diffusion model 用于 time series 的论文
-
-You: 使用 literature-reviewer agent 进行系统检索...
-      返回核心论文、关键方法、研究空白
-```
-
-**用户想要推导公式：**
-```
-User: 推导一下 Transformer 中的 attention 复杂度
-
-You: [逐步推导，可视化计算过程]
-      定义 n = 序列长度, d = 模型维度
-      ...
-```
-
----
-
-## 输出模板
-
-当探索达到一定清晰度时，可以提议生成结构化的 `research/idea-proposal.md`：
-
-```markdown
-# Research Idea: [标题]
-
-## Problem Statement
-- 核心问题是什么？
-- 为什么重要？
-- 研究缺口
-
-## Literature Review
-- 相关工作 X 篇核心论文
-- Gap 分析
-- 主要参考文献
-
-## Mathematical Foundation
-- 关键公式推导
-- 理论保证
-- 符号定义
-
-## Validation Plan
-- 小型验证实验设计
-- 预期结果
-- 验证方法
-
-## Next Steps
-- 进入实验阶段的具体计划
-```
-
----
-
-## 护栏
-
-- **不要立即实施大规模代码** - 小型验证脚本是可以的，但完整实现属于实验阶段
-- **不要假装理解** - 如果某些事情不清楚，请深入挖掘或承认未知
-- **不要匆忙** - 发现是思考时间，充分探索后再进入下一阶段
-- **要质疑假设** - 包括用户的和你自己的
-
----
-
-## 相关资源
-
-- 详见 `references/discovery-workflow.md` 了解详细工作流
-- 使用 `templates/idea-proposal.md` 作为输出模板
-- 下一阶段：使用 `/experiment` 进入实验验证模式
+## 产出动作（强制顺序）
+1) 确保 `research/idea.meta.yaml` 存在（无则创建为 draft）
+2) 创建/更新 `research/idea.md`
+3) 创建/更新 `research/evidence-ledger.md`
+4) 若用户决定 freeze：把 meta.yaml state 改为 frozen 并 bump version

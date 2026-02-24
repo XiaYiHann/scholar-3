@@ -1,0 +1,7 @@
+state: draft          # draft | frozen
+version: v0.1
+frozen_at: null
+last_updated: YYYY-MM-DD
+
+proposal_counter: 0
+amendment_counter: 0

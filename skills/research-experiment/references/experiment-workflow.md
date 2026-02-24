@@ -1,222 +1,76 @@
-# Experiment Workflow 详细指南
+# Experiment Workflow (Proposal Package)
 
-本文档提供 `research-experiment` 技能的详细工作流程说明。
+本文档提供 `research-experiment`（Proposal/Experiment 规划阶段）的工作流程说明。
 
-## 工作流概述
+> 核心定位：本阶段主要负责“把一个 phase 变成可执行的 proposal 包（proposal + plan + tasks）”，实际执行与审计分别交给 `/apply` 与 `/verify`。
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   Experiment Phase Workflow                     │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐       │
-│   │  实验设计   │───▶│  架构设计   │───▶│  代码实现   │       │
-│   └─────────────┘    └─────────────┘    └─────────────┘       │
-│          │                                    │                │
-│          │                                    ▼                │
-│          │                            ┌─────────────┐          │
-│          │                            │  实验执行   │          │
-│          │                            └─────────────┘          │
-│          │                                    │                │
-│          ▼                                    ▼                │
-│   ┌─────────────┐                    ┌─────────────┐          │
-│   │  结果分析   │◀───────────────────│  数据记录   │          │
-│   └─────────────┘                    └─────────────┘          │
-│          │                                                       │
-│          ▼                                                       │
-│   ┌─────────────┐                                               │
-│   │  生成报告   │                                                │
-│   └─────────────┘                                               │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+## 输入前置
 
-## 阶段 1: 实验设计
+必须存在：
+- `research/idea.md`
+- `research/idea.meta.yaml`
+- `research/evidence-ledger.md`
 
-### 目标
-将研究想法转化为可执行的实验方案。
+默认要求：
+- `research/idea.meta.yaml` 的 `state: frozen`（否则只能做 exploratory，并在后续 report/verify 中明确标注）
 
-### 设计要素
-1. **实验变量**
-   - 自变量: 控制变化的因素
-   - 因变量: 衡量结果的指标
-   - 控制变量: 保持恒定的因素
+## 产出（proposal 包）
 
-2. **对照组设置**
-   - Baseline A: 现有最佳方法
-   - Baseline B: 常用方法
-   - Ablation: 消融实验设计
+对一个目录 `research/proposals/Pxx-<slug>/` 生成/更新：
+- `proposal.md`：意图、范围、目标 IDs、成功/停止条件、风险
+- `experiment-plan.md`：预注册（NO results）、E* 映射、泄漏控制、baseline 公平性、可复现计划
+- `tasks.md`：严格 checkbox 清单（用于 `/apply` 逐条执行）
 
-3. **评估指标**
-   - 主要指标: 最关注的指标
-   - 次要指标: 辅助分析指标
-   - 统计检验方法
+建议把实验产物统一放在 proposal 目录内：
+- `artifacts/logs/`
+- `artifacts/configs/`
+- `artifacts/figures/`
+- `artifacts/tables/`
 
-### 输出
-- 实验设计文档
-- 变量定义表
-- 评估计划
+## 步骤
 
-### 最低限度预注册（推荐）
+### 1) 选择或新建 proposal（Pxx）
 
-为减少 p-hacking / cherry-picking，至少明确并写进报告：
-- Primary metric（唯一主指标，写死）
-- Tuning protocol（只在 val 上调参，不触碰 test）
-- Number of runs（默认 ≥3 seeds）
-- Stopping rule（early stop 规则）
-- Report rule（失败也要记录，不许只挑最好）
+编号规则（强制）：
+- 从 `research/idea.meta.yaml` 读取 `proposal_counter`
+- 新建时 `proposal_counter += 1`，生成 `P01/P02/...`
 
-## 阶段 2: 架构设计
+### 2) 写 `proposal.md`
 
-### 使用 architect agent
-调用 `architect` agent 进行系统架构设计。
+要求：
+- 明确 intent（要证伪/支持什么）
+- Target IDs 必须来自 `research/idea.md`（H*/F*/C*）
+- 写清 success / kill criteria
+- 明确依赖与风险（泄漏、baseline 公平性、统计功效、复现性缺口）
 
-### 设计原则
-1. **模块化** - 小文件原则 (200-400 行)
-2. **可配置** - 使用 dataclass 作为配置
-3. **可测试** - 遵循 TDD 原则
+### 3) 写 `experiment-plan.md`（计划-only）
 
-### 目录结构
-```
-src/
-├── data_module/
-│   ├── dataset/
-│   ├── augmentation/
-│   └── utils.py
-├── model_module/
-│   ├── base_model.py
-│   ├── transformer.py
-│   └── cnn.py
-├── trainer_module/
-│   └── trainer.py
-└── utils/
-    └── logger.py
-```
+硬规则：
+- 只写计划，不写任何结果（NO results）
+- 预注册至少包含：
+  - primary metric（唯一主指标，写死）
+  - tuning protocol（val-only，不触碰 test）
+  - seeds/repeats（默认 >= 3）
+  - reporting rule（失败也要记录，不许 cherry-pick）
 
-### 输出
-- 架构设计文档
-- 目录结构
-- 接口定义
+### 4) 写 `tasks.md`（可追踪执行清单）
 
-## 阶段 3: 代码实现
+硬规则：
+- 必须使用 `- [ ] X.Y ...` 的 checkbox 格式（否则进度追踪会失效）
+- 每个任务必须包含：
+  - Command
+  - Outputs（路径）
+  - Accept（验收标准）
+  - Links（E*/H*/F*/C*）
 
-### 遵循代码规范
-参考 `coding-style.md` 中的规范（同目录），并以可复现性要求为最高优先级（见 `experiment-reproducibility.md`）。
+### 5) 交接到 `/apply` 与 `/verify`
 
-### 核心规范
-1. **文件大小** - 不超过 400 行
-2. **类型提示** - 所有函数必须有类型提示
-3. **文档字符串** - 使用 docstring 说明功能
-4. **错误处理** - 捕获特定异常，记录日志
-5. **不可变配置** - 使用 `@dataclass(frozen=True)`
+- `/apply`：按 tasks.md 的未完成项逐条执行；只有输出存在才允许勾选。
+- `/verify`：审计证伪条件、可复现性、证据账本闭环，并给出下一步决策（FIX PLAN / NEW PROPOSAL / IDEA AMENDMENT）。
 
-### 使用 openspec 工作流
-- `/opsx:new` - 创建新变更
-- `/opsx:apply` - 实现任务
-- `/opsx:ff` - 快进模式
+## 常见错误（Fail-fast）
 
-### 输出
-- 实现的代码
-- 单元测试
-- 代码审查通过
-
-## 阶段 4: 实验执行
-
-### 可复现性设置
-```python
-def set_seed(seed: int = 42) -> None:
-    """Set random seeds for reproducibility."""
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    os.environ["PYTHONHASHSEED"] = str(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-```
-
-### 环境记录
-```bash
-# 记录环境信息
-pip freeze > requirements.txt
-
-# 记录 GPU 信息
-nvidia-smi
-```
-
-### Checkpoint 管理
-```
-checkpoints/
-├── best_model.pt          # 最佳模型
-├── checkpoint_epoch_50.pt # 定期保存
-├── checkpoint_latest.pt   # 最新检查点
-└── config.yaml            # 配置文件
-```
-
-### 输出
-- 实验日志
-- Checkpoint 文件
-- 环境信息
-
-## 阶段 5: 结果分析
-
-### 使用 data-analyst agent
-调用 `data-analyst` agent 进行数据分析。
-
-### 分析内容
-1. **主要结果**
-   - 各方法的定量结果
-   - 结果表格
-   - 可视化图表
-
-2. **统计检验**
-   - t-test / bootstrap
-   - 显著性水平
-   - 置信区间
-
-3. **消融实验**
-   - 各组件贡献分析
-   - 组件交互分析
-
-4. **对比分析**
-   - 与 baseline 对比
-   - 优势与劣势分析
-
-### 输出
-- 结果表格
-- 可视化图表
-- 统计分析报告
-
-## 阶段 6: 生成报告
-
-### 使用模板
-使用 `templates/experiment-report.md` 生成报告。
-
-### 报告内容
-1. Setup - 硬件、环境、配置
-2. Results - 结果表格、图表
-3. Analysis - 统计检验、消融实验
-4. Conclusion - 假设验证、局限性
-5. Reproducibility - 种子、路径、命令
-
-### 输出位置
-`research/experiment-report.md`
-
-## 向下一阶段过渡
-
-### 证据账本（Evidence Ledger）
-
-在实验阶段持续更新 `research/evidence-ledger.md`：
-- 每条 Claim 绑定对应证据（表/图/定理/日志路径）
-- 对证据状态做标注：`planned/partial/verified/falsified`
-
-### Exit Criteria（Experiment → Paper，顶会偏严默认）
-
-当满足以下条件时，才可以进入论文撰写阶段：
-- [ ] 主结果至少 3 个 seeds（或等价 bootstrap），并报告方差或置信区间（CI）
-- [ ] 至少 1 个 sanity check（如标签打乱/输入随机化/容量极端对照）
-- [ ] 至少 1 个消融实验（ablation）
-- [ ] 至少 1 个失败案例或局限性（写进 report 与 ledger）
-- [ ] 可复现包完整：命令、配置、环境、产物路径齐全（见 `experiment-reproducibility.md`）
-
-使用 `/paper` 命令进入论文撰写模式。
+- 把结果写进 `experiment-plan.md`（违规）
+- 在 plan 阶段偷偷改 primary metric 或 tuning protocol（应走 amendment）
+- tasks.md 没有 outputs/acceptance/links（无法审计）
+- 产物路径不稳定、指针不精确（ledger 无法闭环）

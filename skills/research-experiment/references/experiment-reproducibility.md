@@ -1,6 +1,6 @@
 # Experiment Reproducibility (Minimal)
 
-本文件定义 `research-experiment` 阶段的最小可复现要求：**别人能用你的命令和配置复跑，得到统计上可比较的结果**。
+本文件定义研究执行阶段的最小可复现要求：**别人能用你的命令和配置复跑，得到统计上可比较的结果**。
 
 ## 1) 必须记录的四件事
 
@@ -54,29 +54,42 @@
 - 硬件信息：GPU/CPU 型号、显存/内存
 - 代码版本：git commit hash（如果可用）
 
-## 6) 产物路径建议（可选但推荐）
+## 6) 产物路径建议（推荐）
+
+建议把可复现产物归档在 proposal 目录内：
 
 ```
 research/
-  experiment-report.md
-logs/
-  run_001/
-    config.yaml
-    metrics.json
-    stdout.log
-checkpoints/
-  run_001/
-    best.pt
-    last.pt
-figures/
-  run_001/
-    curve.png
+  proposals/
+    Pxx-some-phase/
+      proposal.md
+      experiment-plan.md
+      tasks.md
+      experiment-report.md
+      verify.md
+      artifacts/
+        logs/
+          run_001/
+            config.yaml
+            metrics.json
+            stdout.log
+        checkpoints/
+          run_001/
+            best.pt
+            last.pt
+        figures/
+          run_001/
+            curve.png
+        tables/
+          main.csv
 ```
+
+`experiment-report.md` 中的每个结果陈述都必须能指向：
+- `artifacts/tables/*` / `artifacts/figures/*` / `artifacts/logs/*` 等精确路径
 
 ## 7) 报告写法（防止“看起来像结果”的编造）
 
 - 任何数字都要能指向证据：
-  - `Table/Figure 编号` 或 `logs/run_xxx/metrics.json`
+  - `Table/Figure 编号` 或 `artifacts/logs/.../metrics.json`
 - 没有证据的内容只能写：
   - 计划（plan）/ 预期（expected）/ 假设（hypothesis）
-
