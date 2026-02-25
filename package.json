@@ -1,6 +1,6 @@
 {
   "name": "scholar3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scholar-3: OPSX-inspired, spec-driven research workflow (CLI installer for Claude Code and Codex)",
   "license": "MIT",
   "type": "module",
