@@ -18,6 +18,12 @@
   - Do **NOT** edit this file directly.
   - Use `research/idea-amendments/Axx-*.md` and require explicit user decision.
 
+## 0.5) Plain-language Rule (for Formulation)
+- If you write any formal definition / equation / threshold, you must also add:
+  - `Symbols:` what each symbol means.
+  - `Plain-language explanation (大白话):` 1–3 lines explaining what this means in practice.
+- If no formalism is used in a subsection, write `N/A (no new formalism)`.
+
 ---
 
 ## 1) Problem Statement
@@ -39,6 +45,14 @@
 | I2 | ... | ... | ... | keep/drop |
 | I3 | ... | ... | ... | keep/drop |
 
+### 1.5 System View (ASCII)
+```text
++----------------+      +------------------+      +------------------+      +-------------------+
+| Problem & Gap  | ---> | H/F/C Formulation| ---> | Evidence Planning | ---> | Proposal Handoff  |
++----------------+      +------------------+      +------------------+      +-------------------+
+```
+Plain-language summary: We start from a real problem, define testable hypotheses/claims, pre-plan evidence, then hand off to `/proposal`.
+
 ---
 
 ## 2) Problem Normal Form (Strict)
@@ -49,10 +63,12 @@
 - Setting: [...]
 - Dataset(s) / environment(s): [...]
 - Primary metric (single, locked): [...]
+- Plain-language explanation (大白话): [Explain why this setting/metric is the right one.]
 
 ### 2.2 Input / Output
 - Input: [...]
 - Output: [...]
+- Plain-language explanation (大白话): [Explain in plain language what goes in and what comes out.]
 
 ### 2.3 Baselines (>= 2 strong baselines)
 - Baseline A: [verifiable reference] — why it is strong
@@ -63,6 +79,12 @@
 - Data constraints:
 - Safety/ethics constraints (if any):
 
+### 2.5 Formal Definition Snippet (optional but recommended)
+- Formal definition (optional):
+- Symbols:
+- Plain-language explanation (大白话, required if formal definition is used):
+- What would falsify this definition?
+
 ---
 
 ## 3) Hypotheses (H*)
@@ -71,6 +93,9 @@
 - Assumptions:
 - Predicted observable effect:
 - Scope (in/out):
+- Formal definition (optional):
+- Symbols:
+- Plain-language explanation (大白话, required if formalism is used):
 
 ### H2: ...
 ...
@@ -83,6 +108,14 @@
 | R1 | H1/F1/C1 | ... | ... | ... | ... |
 | R2 | ... | ... | ... | ... | ... |
 
+### 3.6 Causal Path (ASCII)
+```text
+[Input/Intervention] -> [Mechanism] -> [Observable Effect]
+                              |
+                        [Failure Signal]
+```
+Plain-language summary: This shows what we change, why it should work, what we observe, and what signal counts as failure.
+
 ---
 
 ## 4) Falsification Criteria (F*)
@@ -90,6 +123,7 @@
 
 ### F1 (tests H1):
 - If [observable condition + threshold], then H1 is considered **falsified**.
+- Plain-language explanation (大白话): [Explain why this threshold means the hypothesis failed.]
 
 ### F2 (tests H2):
 - ...
@@ -103,6 +137,7 @@
 - Minimum evidence required:
 - Strong evidence (stretch):
 - Expected artifacts (tables/figures/log paths):
+- Plain-language explanation (大白话): [Explain what this claim really says for a non-expert.]
 
 ### C2: ...
 ...
@@ -138,6 +173,14 @@ For each entry:
 - Statistical reporting:
 - Leakage checks:
 - Baseline fairness protocol:
+- Plain-language explanation (大白话): [Explain this protocol as step-by-step execution rules.]
+
+### 7.5 Evaluation Pipeline (ASCII)
+```text
+Data -> Split(train/val/test) -> Tune(val only) -> Run(seeds)
+     -> Report(metrics + uncertainty) -> Leakage/Fairness checks
+```
+Plain-language summary: First lock data and tuning rules, then run repeated experiments, report uncertainty, and audit leakage/fairness.
 
 ---
 
