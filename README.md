@@ -15,7 +15,8 @@ It enforces:
                       |                                 |
                       | (amendment gate)                v
                       +------------------------ /verify decision
-/experiment -> /apply -> /verify -> /paper
+/proposal -> /apply -> /verify
+                     \-> /paper
 ```
 
 ## Outputs (created in your project)
@@ -43,10 +44,22 @@ Paper:
 ## Commands
 
 - `/discover` — create/update `research/idea.md`, initialize ledger, prepare to freeze
-- `/experiment` — create/select a proposal folder and generate proposal+plan+tasks scaffolding
+- `/discover` — create/update `research/idea.md` with Discover v2 gates: diverge → challenge → converge
+- `/proposal` — create/select a proposal folder and generate proposal+plan+tasks scaffolding
 - `/apply` — execute tasks step-by-step (checkbox tracked)
 - `/verify` — falsification + reproducibility + evidence-ledger audit, decide next action
 - `/paper` — write paper using ONLY `verified` claims from the evidence ledger
+- note: `/experiment` remains as a deprecated alias for backward compatibility
+
+## Discover v2 (Ideation-first)
+
+`/discover` now runs a stricter ideation loop before proposal:
+- Diverge: record >=3 candidate directions
+- Challenge: surface assumptions, failure modes, and risks
+- Converge: lock one direction into H/F/C + protocol
+- Handoff: write a Proposal Handoff Capsule consumed by `/proposal`
+
+This keeps Scholar-3 evidence gates while improving idea quality and handoff speed.
 
 ## Migration (legacy → vNext)
 
@@ -78,13 +91,13 @@ What you get after install:
 - (Namespaced to avoid command collisions.)
 - Claude Code:
   - `/scholar3:discover`
-  - `/scholar3:experiment`
+  - `/scholar3:proposal`
   - `/scholar3:apply`
   - `/scholar3:verify`
   - `/scholar3:paper`
 - Codex:
   - `/scholar3-discover`
-  - `/scholar3-experiment`
+  - `/scholar3-proposal`
   - `/scholar3-apply`
   - `/scholar3-verify`
   - `/scholar3-paper`

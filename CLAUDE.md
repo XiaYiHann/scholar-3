@@ -4,11 +4,12 @@ A strict, spec-driven research workflow designed for **Claude Code** (and compat
 
 ## Workflow (high-level)
 - `/discover` → build/update a single **Idea Spec** (`research/idea.md`)
+- `/discover` includes ideation gates: diverge → challenge → converge → handoff
 - Freeze the idea (`research/idea.meta.yaml` → `state: frozen`)
-- `/experiment` → create/select a **phase proposal** under `research/proposals/Pxx-*`
+- `/proposal` → create/select a **phase proposal** under `research/proposals/Pxx-*`
 - `/apply` → execute tasks step-by-step (checkbox tracked)
 - `/verify` → audit falsification, reproducibility, evidence ledger, and decide next action
-- `/paper` → write paper using ONLY `verified` claims from the evidence ledger
+- `/paper` → write paper using ONLY `verified` claims from the evidence ledger (usually after `/verify`)
 
 ## Outputs (in the user's project)
 - Idea:

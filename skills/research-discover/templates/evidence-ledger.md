@@ -3,7 +3,7 @@
 **Created**: YYYY-MM-DD  
 **Owner**: [Name/Team]  
 
-> 目标：把“论文里想说的 Claim”与“需要的证据”绑定起来，贯穿 `/discover → /experiment → /paper`。
+> 目标：把“论文里想说的 Claim”与“需要的证据”绑定起来，贯穿 `/discover → /proposal → /paper`。
 
 ---
 
@@ -23,4 +23,3 @@
 
 - 每次实验新增表/图/日志时，及时补 Pointer。
 - 任何想写进 Abstract/Contributions 的内容，必须是 `verified`（或至少 `partial` 且明确标注不确定性）。
-

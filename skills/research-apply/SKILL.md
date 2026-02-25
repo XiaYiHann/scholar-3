@@ -29,5 +29,5 @@ metadata:
 - 遇到阻塞必须停止，明确提出阻塞原因与需要的用户输入。
 
 ## 代码与实验规范
-- 代码风格参考：`skills/research-experiment/references/coding-style.md`
-- 可复现要求参考：`skills/research-experiment/references/experiment-reproducibility.md`
+- 代码风格参考：`skills/research-proposal/references/coding-style.md`
+- 可复现要求参考：`skills/research-proposal/references/experiment-reproducibility.md`

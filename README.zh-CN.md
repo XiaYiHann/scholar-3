@@ -15,7 +15,8 @@ Scholar-3 是一个**严格、规范驱动**的科研工作流，目标是让 ag
                      |                               |
                      |（amendment gate）             v
                      +------------------------ /verify 决策
-/experiment -> /apply -> /verify -> /paper
+/proposal -> /apply -> /verify
+                   \-> /paper
 ```
 
 ## 产物路径（在你的项目里生成）
@@ -43,10 +44,22 @@ Paper：
 ## 命令
 
 - `/discover`：创建/更新 idea spec，初始化 ledger，准备 freeze
-- `/experiment`：创建/选择 proposal，生成 proposal + plan + tasks
+- `/discover`：按 Discover v2 执行（diverge → challenge → converge），再进入 proposal
+- `/proposal`：创建/选择 proposal，生成 proposal + plan + tasks
 - `/apply`：按 tasks 逐条执行（checkbox 追踪）
 - `/verify`：证伪 + 可复现 + 证据账本审计，给出下一步决策
 - `/paper`：只用 ledger 中 `verified` 的主张写论文
+- 说明：`/experiment` 作为兼容别名保留（后续将废弃）
+
+## Discover v2（先发散再收敛）
+
+`/discover` 现在默认包含 ideation 闸门：
+- Diverge：至少记录 3 个候选方向
+- Challenge：显式写出假设、失败模式与风险
+- Converge：收敛为单一主线并锁定 H/F/C + protocol
+- Handoff：生成 Proposal Handoff Capsule，供 `/proposal` 直接消费
+
+这样可以在保留 Scholar-3 证据链约束的同时，显著提升 idea 质量和交接效率。
 
 ## 迁移（旧路径 → vNext）
 
@@ -77,13 +90,13 @@ npx scholar3 init
 安装后你会得到（命令做了 namespace，避免冲突）：
 - Claude Code：
   - `/scholar3:discover`
-  - `/scholar3:experiment`
+  - `/scholar3:proposal`
   - `/scholar3:apply`
   - `/scholar3:verify`
   - `/scholar3:paper`
 - Codex：
   - `/scholar3-discover`
-  - `/scholar3-experiment`
+  - `/scholar3-proposal`
   - `/scholar3-apply`
   - `/scholar3-verify`
   - `/scholar3-paper`

@@ -10,8 +10,11 @@ artifacts:
     instruction: |
       Create or update the single global idea spec at research/idea.md.
       Requirements:
+      - Must include divergence log with >=3 candidate directions (I*).
       - Must include stable IDs: H*, F*, C*.
+      - Must include an assumptions/risk register linked to H/F/C.
       - Must include a locked evaluation protocol section (to be frozen).
+      - Must include a proposal handoff capsule for `/proposal`.
       - Must maintain a Decision Log and Open Questions.
       - Never fabricate citations; mark UNVERIFIED if not verifiable.
     requires: []
@@ -43,6 +46,7 @@ artifacts:
     instruction: |
       Create a phase proposal folder and write proposal.md.
       It must explicitly list targeted H*/F*/C* IDs from research/idea.md.
+      It must consume the proposal handoff capsule from research/idea.md.
     requires: [idea, idea_meta, evidence]
 
   - id: experiment_plan

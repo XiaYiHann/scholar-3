@@ -5,6 +5,9 @@ Scholar-3 intentionally keeps paper writing **evidence-gated** but does not try 
 ## Recommended external sources (examples)
 - `davila7/claude-code-templates` (contains ML paper writing skill templates; verify license and keep attribution).  
   Repo: https://github.com/davila7/claude-code-templates
+- `Orchestra-Research/AI-Research-SKILLs` (ideation workflow patterns for discover-stage inspiration).  
+  Repo: https://github.com/Orchestra-Research/AI-Research-SKILLs  
+  Pinned attribution: `third_party/orchestra-attribution.md`
 
 ## Integration options
 ### Option A: Git submodule (recommended for keeping upstream updates)

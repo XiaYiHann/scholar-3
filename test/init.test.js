@@ -40,7 +40,14 @@ test("init installs claude skills + namespaced commands + manifest", async () =>
 
   assert.equal(result.performed, true);
   await fs.stat(path.join(claudeHome, "skills", "research-discover", "SKILL.md"));
+  await fs.stat(path.join(claudeHome, "skills", "research-proposal", "SKILL.md"));
+  await fs.stat(path.join(claudeHome, "skills", "research-experiment", "SKILL.md"));
   await fs.stat(path.join(claudeHome, "commands", "scholar3", "discover.md"));
+  await fs.stat(path.join(claudeHome, "commands", "scholar3", "proposal.md"));
+  await assert.rejects(
+    fs.stat(path.join(claudeHome, "commands", "scholar3", "experiment.md")),
+    /no such file/i,
+  );
   await fs.stat(path.join(claudeHome, ".scholar3", "manifest.json"));
 });
 
@@ -59,12 +66,22 @@ test("init installs codex skills + prompts + manifest", async () => {
 
   assert.equal(result.performed, true);
   await fs.stat(path.join(codexHome, "skills", "research-discover", "SKILL.md"));
-  const promptPath = path.join(codexHome, "prompts", "scholar3-discover.md");
-  await fs.stat(promptPath);
+  await fs.stat(path.join(codexHome, "skills", "research-proposal", "SKILL.md"));
+  await fs.stat(path.join(codexHome, "skills", "research-experiment", "SKILL.md"));
+  const discoverPromptPath = path.join(codexHome, "prompts", "scholar3-discover.md");
+  const proposalPromptPath = path.join(codexHome, "prompts", "scholar3-proposal.md");
+  await fs.stat(discoverPromptPath);
+  await fs.stat(proposalPromptPath);
+  await assert.rejects(
+    fs.stat(path.join(codexHome, "prompts", "scholar3-experiment.md")),
+    /no such file/i,
+  );
   await fs.stat(path.join(codexHome, ".scholar3", "manifest.json"));
 
-  const promptText = await fs.readFile(promptPath, "utf8");
-  assert.match(promptText, /\/scholar3-discover/);
+  const discoverPromptText = await fs.readFile(discoverPromptPath, "utf8");
+  const proposalPromptText = await fs.readFile(proposalPromptPath, "utf8");
+  assert.match(discoverPromptText, /\/scholar3-discover/);
+  assert.match(proposalPromptText, /\/scholar3-proposal/);
 });
 
 test("init twice backs up overwritten files", async () => {

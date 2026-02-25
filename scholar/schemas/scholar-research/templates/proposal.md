@@ -9,6 +9,13 @@
 ## 1) Intent
 - What is this phase trying to prove/disprove?
 
+## 1.5 Input Handoff (from `research/idea.md`)
+- Candidate selected (I*):
+- Locked metric/tuning protocol summary:
+- Baseline set to keep fair comparison:
+- Top risks carried from discover:
+- Blocking open questions:
+
 ## 2) Target IDs (must come from `research/idea.md`)
 - Hypotheses: [H1, ...]
 - Falsification criteria: [F1, ...]

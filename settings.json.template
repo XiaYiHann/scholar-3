@@ -1,6 +1,7 @@
 {
   "skills": [
     "skills/research-discover",
+    "skills/research-proposal",
     "skills/research-experiment",
     "skills/research-apply",
     "skills/research-verify",
@@ -8,7 +9,7 @@
   ],
   "commands": [
     "commands/discover",
-    "commands/experiment",
+    "commands/proposal",
     "commands/apply",
     "commands/verify",
     "commands/paper"

@@ -2,7 +2,7 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** 让三阶段研究工作流尽量使用 `AskUserQuestion` / `request_user_input` 进行结构化交互，而不是依赖用户自由输入。
+**Goal:** 让研究工作流的核心决策阶段尽量使用 `AskUserQuestion` / `request_user_input` 进行结构化交互，而不是依赖用户自由输入。
 
 **Architecture:** 仅修改三份阶段技能文档，在每个阶段加入统一“交互协议 + 入口问诊 + 分岔追问模板”，并将子 agent 调用前的参数收集改为选项式多轮提问。
 
@@ -27,20 +27,20 @@
 
 ---
 
-### Task 2: 更新 Experiment 阶段技能（experiment）
+### Task 2: 更新 Proposal 阶段技能（proposal）
 
 **Files:**
-- Modify: `skills/research-experiment/SKILL.md`
+- Modify: `skills/research-proposal/SKILL.md`
 
 **Step 1: 插入 AskUserQuestion-first 交互协议**
 - 同 Task 1 的协议，强调：派发 `architect` / `data-analyst` 前先结构化收集参数。
 
 **Step 2: 插入入口问诊（3 问）与决策映射**
-- 增加 `exp_input` / `exp_focus` / `exp_rigor`。
-- 针对 `exp_focus` 给出分支追问模板：框架偏好、基线范围、指标类型、运行预算（每轮 2-3 选项）。
+- 增加 `proposal_input` / `proposal_focus` / `proposal_rigor`。
+- 针对 `proposal_focus` 给出分支追问模板：框架偏好、基线范围、指标类型、运行预算（每轮 2-3 选项）。
 
 **Step 3: 输出与可复现性段落对齐**
-- 把“可复现性要求”与 `exp_rigor` 对齐（快速/标准/严格）。
+- 把“可复现性要求”与 `proposal_rigor` 对齐（快速/标准/严格）。
 
 ---
 
@@ -65,7 +65,7 @@
 
 **Files:**
 - Check: `skills/research-discover/SKILL.md`
-- Check: `skills/research-experiment/SKILL.md`
+- Check: `skills/research-proposal/SKILL.md`
 - Check: `skills/research-paper/SKILL.md`
 
 **Step 1: 一致性搜索**
@@ -73,9 +73,8 @@
 - Expected: 三个阶段技能都包含协议与入口问诊，并出现对应 `id`。
 
 **Step 2: 手动验证（在 Claude Code / Codex 执行）**
-- 运行 `/discover`、`/experiment`、`/paper`，观察是否先出现入口问诊（选项式）。
+- 运行 `/discover`、`/proposal`、`/paper`，观察是否先出现入口问诊（选项式）。
 - 选择不同路径，确认关键分岔点继续用选项式追问而非自由输入。
 
 **Step 3: 可选提交**
 - 如需提交变更：`git add skills docs/plans && git commit -m \"docs: askuserquestion-first flows\"`
-

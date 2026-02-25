@@ -1,16 +1,18 @@
 ---
-name: Experiment (Deprecated)
-description: 兼容别名：请使用 `/proposal`（分阶段 proposal：plan + tasks）
+name: Proposal
+description: Proposal 模式（分阶段 proposal：plan + tasks）
 category: Research
 tags: [proposal, experiment-plan, tasks]
 ---
-
-`/experiment` 作为兼容入口保留，建议迁移到 `/proposal`。
 
 进入 `/proposal`：在冻结的 `research/idea.md` 下创建/选择一个 proposal 目录，并生成：
 - `proposal.md`
 - `experiment-plan.md`（禁止写结果）
 - `tasks.md`（checkbox 严格格式）
+
+前置读取（强制）：
+- `research/idea.md` 的 `Proposal Handoff Capsule`
+- `research/evidence-ledger.md` 中目标 C* 的当前状态
 
 输出：
 - `research/proposals/Pxx-*/proposal.md`

@@ -30,6 +30,15 @@
 ### 1.3 Gap
 - What is missing in existing work?
 
+### 1.4 Candidate Directions (Divergence Log)
+> Record at least 3 candidate directions before convergence.
+
+| Idea ID | Direction summary | Expected upside | Main risk | Keep / Drop |
+|---|---|---|---|---|
+| I1 | ... | ... | ... | keep/drop |
+| I2 | ... | ... | ... | keep/drop |
+| I3 | ... | ... | ... | keep/drop |
+
 ---
 
 ## 2) Problem Normal Form (Strict)
@@ -65,6 +74,14 @@
 
 ### H2: ...
 ...
+
+### 3.5 Assumptions & Risk Register
+> Make reviewer-attack surfaces explicit before freeze.
+
+| Risk ID | Linked H/F/C | Assumption | Failure mode | Detection signal | Mitigation |
+|---|---|---|---|---|---|
+| R1 | H1/F1/C1 | ... | ... | ... | ... |
+| R2 | ... | ... | ... | ... | ... |
 
 ---
 
@@ -129,6 +146,20 @@ For each entry:
 
 - P01: targets H1/F1, supports C1
 - P02: targets H2/F2, supports C2
+
+### 8.5 Proposal Handoff Capsule (for `/proposal`)
+> Keep this concise so proposal phase can start without re-discovery.
+
+- Candidate selected: I?
+- Target IDs for next phase: H* / F* / C*
+- Locked protocol summary:
+  - dataset/setting:
+  - primary metric:
+  - tuning protocol:
+- Baseline set (must include >=2 strong baselines):
+- Evidence ledger focus (which claims to move from planned -> partial/verified):
+- Top 3 risks (from risk register):
+- Open questions that block execution:
 
 ---
 
